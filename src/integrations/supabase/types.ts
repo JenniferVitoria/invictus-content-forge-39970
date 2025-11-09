@@ -115,6 +115,36 @@ export type Database = {
           },
         ]
       }
+      email_verification_codes: {
+        Row: {
+          code: string
+          created_at: string
+          email: string
+          expires_at: string
+          id: string
+          user_id: string
+          verified: boolean
+        }
+        Insert: {
+          code: string
+          created_at?: string
+          email: string
+          expires_at: string
+          id?: string
+          user_id: string
+          verified?: boolean
+        }
+        Update: {
+          code?: string
+          created_at?: string
+          email?: string
+          expires_at?: string
+          id?: string
+          user_id?: string
+          verified?: boolean
+        }
+        Relationships: []
+      }
       invcoin_transactions: {
         Row: {
           amount: number
@@ -192,6 +222,42 @@ export type Database = {
           },
         ]
       }
+      plan_types: {
+        Row: {
+          created_at: string
+          display_name: string
+          features: Json
+          id: string
+          max_articles_per_month: number
+          max_sites: number
+          monthly_invicoins: number
+          name: string
+          price_monthly: number
+        }
+        Insert: {
+          created_at?: string
+          display_name: string
+          features?: Json
+          id?: string
+          max_articles_per_month: number
+          max_sites: number
+          monthly_invicoins: number
+          name: string
+          price_monthly?: number
+        }
+        Update: {
+          created_at?: string
+          display_name?: string
+          features?: Json
+          id?: string
+          max_articles_per_month?: number
+          max_sites?: number
+          monthly_invicoins?: number
+          name?: string
+          price_monthly?: number
+        }
+        Relationships: []
+      }
       site_categories: {
         Row: {
           category_name: string
@@ -232,6 +298,7 @@ export type Database = {
           avatar_url: string | null
           created_at: string
           display_name: string | null
+          email_verified: boolean
           id: string
           invi_coins: number
           plan_type: string
@@ -242,6 +309,7 @@ export type Database = {
           avatar_url?: string | null
           created_at?: string
           display_name?: string | null
+          email_verified?: boolean
           id?: string
           invi_coins?: number
           plan_type?: string
@@ -252,6 +320,7 @@ export type Database = {
           avatar_url?: string | null
           created_at?: string
           display_name?: string | null
+          email_verified?: boolean
           id?: string
           invi_coins?: number
           plan_type?: string
@@ -301,7 +370,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      cleanup_expired_verification_codes: { Args: never; Returns: undefined }
     }
     Enums: {
       [_ in never]: never

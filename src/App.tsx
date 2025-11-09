@@ -10,6 +10,7 @@ import Profile from "./pages/Profile";
 import ConnectSite from "./pages/ConnectSite";
 import Monetize from "./pages/Monetize";
 import CreateArticles from "./pages/CreateArticles";
+import Plans from "./pages/Plans";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -28,6 +29,7 @@ const App = () => (
           <Route path="/connect-site" element={<ConnectSite />} />
           <Route path="/monetize" element={<Monetize />} />
           <Route path="/create-articles" element={<CreateArticles />} />
+          <Route path="/plans" element={<Plans />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

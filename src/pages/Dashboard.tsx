@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Coins, Globe, DollarSign, FileText, Palette, LayoutTemplate, Rss, LogOut, Menu, User } from "lucide-react";
+import { Coins, Globe, DollarSign, FileText, Palette, LayoutTemplate, Rss, LogOut, Menu, User, Crown } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { toast } from "sonner";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
@@ -11,6 +11,9 @@ import ThemeToggle from "@/components/ThemeToggle";
 import AnalyticsCards from "@/components/Dashboard/AnalyticsCards";
 import PurchaseInvCoins from "@/components/Dashboard/PurchaseInvCoins";
 import TransactionHistory from "@/components/Dashboard/TransactionHistory";
+import PlanLimitsCard from "@/components/Dashboard/PlanLimitsCard";
+import { usePlanLimits } from "@/hooks/usePlanLimits";
+import { useArticleNotifications } from "@/hooks/useArticleNotifications";
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -23,6 +26,21 @@ const Dashboard = () => {
   const [coinsSpent, setCoinsSpent] = useState(0);
   const [displayName, setDisplayName] = useState("");
   const [avatarUrl, setAvatarUrl] = useState("");
+  
+  const { data: planLimits } = usePlanLimits(user?.id);
+  
+  // Ativar notificações de artigos em tempo real
+  useArticleNotifications(user?.id);
+
+  useEffect(() => {
+    // Notificar quando InviCoins estiver baixo
+    if (user && inviCoins > 0 && inviCoins <= 5) {
+      toast.warning("Saldo baixo de InviCoins!", {
+        description: `Você tem apenas ${inviCoins} InviCoins restantes. Considere adquirir mais.`,
+        duration: 5000,
+      });
+    }
+  }, [inviCoins, user]);
 
   useEffect(() => {
     checkUser();
@@ -202,9 +220,14 @@ const Dashboard = () => {
               {user?.email}
             </p>
             <div className="mt-4 flex items-center gap-3 flex-wrap">
-              <div className="px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full border border-white/20">
-                <span className="text-white/80 text-sm">Plano: <span className="font-bold text-white">{planType.toUpperCase()}</span></span>
-              </div>
+              <Button
+                variant="outline"
+                onClick={() => navigate("/plans")}
+                className="px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full border border-white/20 hover:bg-white/20 text-white hover:text-white"
+              >
+                <Crown className="w-4 h-4 mr-2" />
+                Plano: <span className="font-bold ml-1">{planType.toUpperCase()}</span>
+              </Button>
               <PurchaseInvCoins 
                 currentBalance={inviCoins}
                 onPurchaseComplete={() => fetchUserProfile(user?.id)}
@@ -233,6 +256,10 @@ const Dashboard = () => {
         coinsSpent={coinsSpent}
         currentBalance={inviCoins}
       />
+
+      <div className="mb-8">
+        <PlanLimitsCard userId={user?.id} />
+      </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
         <TransactionHistory />

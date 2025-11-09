@@ -9,6 +9,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { Zap, ArrowLeft, Sparkles, Shield, Rocket } from "lucide-react";
 import ThemeToggle from "@/components/ThemeToggle";
+import EmailVerification from "@/components/EmailVerification";
 
 const Auth = () => {
   const navigate = useNavigate();
@@ -17,6 +18,8 @@ const Auth = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [displayName, setDisplayName] = useState("");
+  const [showVerification, setShowVerification] = useState(false);
+  const [pendingUserId, setPendingUserId] = useState<string | null>(null);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -60,7 +63,7 @@ const Auth = () => {
     setLoading(true);
 
     try {
-      const { error } = await supabase.auth.signUp({
+      const { data, error } = await supabase.auth.signUp({
         email,
         password,
         options: {
@@ -73,13 +76,35 @@ const Auth = () => {
 
       if (error) throw error;
 
-      toast.success("Conta criada com sucesso! Faça login para continuar.");
-      setDisplayName("");
+      if (data.user) {
+        setPendingUserId(data.user.id);
+        setShowVerification(true);
+        
+        // Enviar código de verificação
+        const { error: sendError } = await supabase.functions.invoke("send-verification-code", {
+          body: { email, userId: data.user.id },
+        });
+
+        if (sendError) {
+          console.error("Erro ao enviar código:", sendError);
+          toast.warning("Conta criada, mas houve um problema ao enviar o código de verificação");
+        }
+      }
     } catch (error: any) {
       toast.error(error.message || "Erro ao criar conta");
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleVerified = () => {
+    toast.success("Email verificado com sucesso! Você pode fazer login agora.");
+    setShowVerification(false);
+    setPendingUserId(null);
+    setEmail("");
+    setPassword("");
+    setConfirmPassword("");
+    setDisplayName("");
   };
 
   const benefits = [
@@ -142,6 +167,14 @@ const Auth = () => {
 
         {/* Right Side - Auth Form */}
         <div className="w-full max-w-md mx-auto animate-scale-in">
+          {showVerification && pendingUserId ? (
+            <EmailVerification
+              email={email}
+              userId={pendingUserId}
+              onVerified={handleVerified}
+            />
+          ) : (
+            <>
           <div className="text-center mb-8 lg:hidden">
             <div className="inline-flex items-center justify-center gap-2 mb-4">
               <div className="w-14 h-14 bg-gradient-primary rounded-2xl flex items-center justify-center shadow-glow animate-pulse-glow">
@@ -291,6 +324,8 @@ const Auth = () => {
               Voltar para Home
             </Button>
           </div>
+          </>
+          )}
         </div>
       </div>
     </div>
