@@ -14,7 +14,288 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      article_images: {
+        Row: {
+          article_id: string
+          created_at: string
+          id: string
+          image_url: string
+          position: number
+          subtitle: string | null
+        }
+        Insert: {
+          article_id: string
+          created_at?: string
+          id?: string
+          image_url: string
+          position: number
+          subtitle?: string | null
+        }
+        Update: {
+          article_id?: string
+          created_at?: string
+          id?: string
+          image_url?: string
+          position?: number
+          subtitle?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "article_images_article_id_fkey"
+            columns: ["article_id"]
+            isOneToOne: false
+            referencedRelation: "articles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      articles: {
+        Row: {
+          category_id: string | null
+          content: string
+          created_at: string
+          id: string
+          language: string
+          published_date: string | null
+          scheduled_date: string | null
+          seo_score: number | null
+          site_id: string
+          status: string
+          title: string
+          updated_at: string
+          user_id: string
+          wordpress_post_id: number | null
+        }
+        Insert: {
+          category_id?: string | null
+          content: string
+          created_at?: string
+          id?: string
+          language?: string
+          published_date?: string | null
+          scheduled_date?: string | null
+          seo_score?: number | null
+          site_id: string
+          status?: string
+          title: string
+          updated_at?: string
+          user_id: string
+          wordpress_post_id?: number | null
+        }
+        Update: {
+          category_id?: string | null
+          content?: string
+          created_at?: string
+          id?: string
+          language?: string
+          published_date?: string | null
+          scheduled_date?: string | null
+          seo_score?: number | null
+          site_id?: string
+          status?: string
+          title?: string
+          updated_at?: string
+          user_id?: string
+          wordpress_post_id?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "articles_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "site_categories"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "articles_site_id_fkey"
+            columns: ["site_id"]
+            isOneToOne: false
+            referencedRelation: "wordpress_sites"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      invcoin_transactions: {
+        Row: {
+          amount: number
+          created_at: string
+          description: string
+          id: string
+          type: string
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          description: string
+          id?: string
+          type: string
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          description?: string
+          id?: string
+          type?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      monetization_config: {
+        Row: {
+          completed: boolean | null
+          created_at: string
+          id: string
+          site_id: string
+          step_categories: boolean | null
+          step_pages: boolean | null
+          step_permalinks: boolean | null
+          step_plugins: boolean | null
+          step_site_info: boolean | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          completed?: boolean | null
+          created_at?: string
+          id?: string
+          site_id: string
+          step_categories?: boolean | null
+          step_pages?: boolean | null
+          step_permalinks?: boolean | null
+          step_plugins?: boolean | null
+          step_site_info?: boolean | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          completed?: boolean | null
+          created_at?: string
+          id?: string
+          site_id?: string
+          step_categories?: boolean | null
+          step_pages?: boolean | null
+          step_permalinks?: boolean | null
+          step_plugins?: boolean | null
+          step_site_info?: boolean | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "monetization_config_site_id_fkey"
+            columns: ["site_id"]
+            isOneToOne: false
+            referencedRelation: "wordpress_sites"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      site_categories: {
+        Row: {
+          category_name: string
+          category_slug: string
+          created_at: string
+          id: string
+          site_id: string
+          wordpress_category_id: number | null
+        }
+        Insert: {
+          category_name: string
+          category_slug: string
+          created_at?: string
+          id?: string
+          site_id: string
+          wordpress_category_id?: number | null
+        }
+        Update: {
+          category_name?: string
+          category_slug?: string
+          created_at?: string
+          id?: string
+          site_id?: string
+          wordpress_category_id?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "site_categories_site_id_fkey"
+            columns: ["site_id"]
+            isOneToOne: false
+            referencedRelation: "wordpress_sites"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string
+          display_name: string | null
+          id: string
+          invi_coins: number
+          plan_type: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string
+          display_name?: string | null
+          id?: string
+          invi_coins?: number
+          plan_type?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string
+          display_name?: string | null
+          id?: string
+          invi_coins?: number
+          plan_type?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      wordpress_sites: {
+        Row: {
+          api_key: string | null
+          created_at: string
+          domain: string
+          id: string
+          plugin_active: boolean | null
+          site_name: string
+          site_url: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          api_key?: string | null
+          created_at?: string
+          domain: string
+          id?: string
+          plugin_active?: boolean | null
+          site_name: string
+          site_url: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          api_key?: string | null
+          created_at?: string
+          domain?: string
+          id?: string
+          plugin_active?: boolean | null
+          site_name?: string
+          site_url?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

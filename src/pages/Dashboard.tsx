@@ -211,15 +211,15 @@ const Dashboard = () => {
               />
             </div>
           </div>
-          <div className="glass-effect bg-white/10 dark:bg-white/10 px-10 py-7 rounded-2xl border-2 border-white/30 hover-lift relative overflow-hidden group">
+          <div className="glass-effect bg-gradient-to-br from-secondary/20 to-primary/20 dark:from-white/10 dark:to-white/10 px-10 py-7 rounded-2xl border-2 border-secondary/40 dark:border-white/30 hover-lift relative overflow-hidden group">
             <div className="absolute inset-0 bg-gradient-secondary opacity-0 group-hover:opacity-20 transition-opacity duration-300" />
             <div className="relative flex items-center gap-5">
               <div className="w-16 h-16 bg-gradient-secondary rounded-2xl flex items-center justify-center shadow-glow-secondary group-hover:scale-110 transition-transform duration-300">
                 <Coins className="w-9 h-9 text-white" />
               </div>
               <div>
-                <p className="text-white text-sm font-medium uppercase tracking-wider mb-1">Saldo de InviCoins</p>
-                <p className="text-5xl font-display font-bold text-white">{inviCoins}</p>
+                <p className="text-foreground dark:text-white text-sm font-medium uppercase tracking-wider mb-1">Saldo de InviCoins</p>
+                <p className="text-5xl font-display font-bold text-gradient-primary dark:text-white">{inviCoins}</p>
               </div>
             </div>
             <div className="absolute -bottom-1 -right-1 w-20 h-20 bg-accent/20 rounded-full blur-2xl" />
